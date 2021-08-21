@@ -90,10 +90,10 @@ void fractal_zoom(int max_iters, double increment) {
         fprintf(stderr, "could not open file\n");
         exit(EXIT_FAILURE);
     }
-    for (j=0; j<x_len; j++) {
-        for (i=0; i<y_len; i++) {
+    for (i=0; i<y_len; i++) {
+        for (j=0; j<x_len; j++) {
             fprintf(fp1, "%lf", result[i][j]);
-            if (i<(y_len-1)) {
+            if (j<(x_len-1)) {
                 fprintf(fp1, ",");
             }
         }
@@ -107,6 +107,6 @@ void fractal_zoom(int max_iters, double increment) {
 
 int main() {
     printf("hello world\n");
-    fractal_zoom(1000,0.01);
+    fractal_zoom(1000,0.005);
     return 0;
 }
