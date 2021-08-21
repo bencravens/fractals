@@ -26,18 +26,16 @@ double* arange(double start, double end, double increment) {
     }
 
     diff = end - start;
-    printf("diff is %f\n",diff);
-    num = (int) (diff)/increment + 1;
-    printf("num is %d\n",diff/increment);
+    num = (diff/increment) + 1;
     result = emalloc(num * sizeof result[0]);
     for (i=0;i<num;i++) {
         result[i] = start + increment * i;
     }
-    
+
     for (i=0;i<num;i++) {
         printf("%f\n",result[i]);
     }
-    
+
     /*another error check. Last value of array should be "end"*/
     if (result[num-1] != end) {
         fprintf(stderr,"last entry: %f. Should be %f\n",result[num-1],end);
@@ -48,13 +46,50 @@ double* arange(double start, double end, double increment) {
 
 void fractal_zoom(int max_iters, int x_size, int y_size) {
     double* x_range = arange(-2.5,1.0,0.1);
+    int x_len = 36;
     double* y_range = arange(-1,1,0.1);
+    int y_len = 21;
+    double result[y_len][x_len];
+    int i;
+    int j;
+    double x_0;
+    double y_0;
+    double x;
+    double y;
+    double x_temp;
+    double x2;
+    double y2;
+    int count;
+    FILE* fp1
+
+    /*make the result matrix*/
+    for(i=0;i<y_len;i++){
+        for(j=0;j<x_len;j++){
+            printf("%f, %f\n",x_range[j],y_range[i]);
+            x_0 = x_range[j];
+            y_0 = y_range[i];
+            x = x_range[j];
+            y = y_range[i];
+            count = 0;
+            /*iterate until convergence for each pixel*/
+            while ((pow(x,2.0) + pow(y,2.0) < 4) && (count < max_iters)) {
+                x2 = pow(x,2.0);
+                y2 = pow(y,2.0);
+                x_temp = x2 - y2 + x_0;
+                y = 2*x*y + y_0;
+                x = x_temp;
+                count++;
+            }
+            result[i][j] = count;
+        }
+    }
+
+    free(x_range);
+    free(y_range);
 }
 
 int main() {
     printf("hello world\n");
-    fractal_zoom(1000,100,100);
+    fractal_zoom(1000,1000,1000);
     return 0;
 }
-
-
