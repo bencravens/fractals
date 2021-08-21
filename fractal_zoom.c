@@ -107,6 +107,6 @@ void fractal_zoom(int max_iters, double increment) {
 
 int main() {
     printf("hello world\n");
-    fractal_zoom(1000,0.005);
+    fractal_zoom(1000,0.002);
     return 0;
 }
