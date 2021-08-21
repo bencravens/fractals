@@ -44,11 +44,11 @@ double* arange(double start, double end, double increment) {
     return result;
 }
 
-void fractal_zoom(int max_iters, int x_size, int y_size) {
-    double* x_range = arange(-2.5,1.0,0.1);
-    int x_len = 36;
-    double* y_range = arange(-1,1,0.1);
-    int y_len = 21;
+void fractal_zoom(int max_iters, double increment) {
+    double* x_range = arange(-2.5,1.0,increment);
+    int x_len = (int) ((3.5)/increment) + 1;
+    double* y_range = arange(-1,1,increment);
+    int y_len = (int) ((2)/increment) + 1;
     double result[y_len][x_len];
     int i;
     int j;
@@ -60,7 +60,7 @@ void fractal_zoom(int max_iters, int x_size, int y_size) {
     double x2;
     double y2;
     int count;
-    FILE* fp1
+    FILE* fp1;
 
     /*make the result matrix*/
     for(i=0;i<y_len;i++){
@@ -84,12 +84,29 @@ void fractal_zoom(int max_iters, int x_size, int y_size) {
         }
     }
 
+    /*write result to csv file so we can plot it with python*/
+    fp1 = fopen("fractal.csv", "w");
+    if (fp1 == NULL) {
+        fprintf(stderr, "could not open file\n");
+        exit(EXIT_FAILURE);
+    }
+    for (j=0; j<x_len; j++) {
+        for (i=0; i<y_len; i++) {
+            fprintf(fp1, "%lf", result[i][j]);
+            if (i<(y_len-1)) {
+                fprintf(fp1, ",");
+            }
+        }
+        fprintf(fp1,"\n");
+    }
+    fclose(fp1);
+
     free(x_range);
     free(y_range);
 }
 
 int main() {
     printf("hello world\n");
-    fractal_zoom(1000,1000,1000);
+    fractal_zoom(1000,0.01);
     return 0;
 }
