@@ -9,5 +9,5 @@ make
 Example output: still image
 <img src="./fractal.png">
 
-Example output: gif (can be much higher resolution, this was rendered on my slow laptop)
+Example output: gif (can be much higher zoom/resolution, this was rendered on my home laptop)
 <img src="./fractal_zoom.gif">
