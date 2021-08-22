@@ -149,22 +149,34 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
 }
 
 /*generate zoom_num csv files zooming in on x_midpoint, y_midpoint*/
-void zoom(double x_min, double x_max, double y_min, double y_max, int zoom_num) {
+void zoom(double x_min, double x_max, double y_min, double y_max) {
     int i;
-    double increment = 0.01;
-    char* filename = "test.csv";
-    for (i=0;i<zoom_num;i++) {
+    double increment = 0.1;
+    char filenames[11][10] = {
+                         "0.csv",
+                         "1.csv",
+                         "2.csv",
+                         "3.csv",
+                         "4.csv",
+                         "5.csv",
+                         "6.csv",
+                         "7.csv",
+                         "8.csv",
+                         "9.csv",
+                         "10.csv"
+                     };
+    for (i=0;i<10;i++) {
         increment = increment / 2;
         x_min = x_min / 2;
         x_max = x_max / 2;
         y_min = y_min / 2;
         y_max = y_max / 2;
-        fractal(filename, x_min, x_max, y_min, y_max,1000,increment);
+        fractal(filenames[i], x_min, x_max, y_min, y_max,1000,increment);
     }   
 }
 
 int main() {
-    zoom(-1.0,1.0,-1.0,1.0,10);
+    zoom(-10.0,10.0,-10.0,10.0);
     /*fractal("test.csv", -0.25, 0.25, -0.25, 0.25, 1000, 0.001);*/
     return 0;
 }
