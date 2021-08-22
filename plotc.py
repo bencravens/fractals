@@ -1,11 +1,9 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from moviepy.editor import ImageSequenceClip
+from PIL import Image
 
-result = []
-for i in range(10):
-    result.append(np.log(np.loadtxt("{}.csv".format(i),delimiter=',')))
-
-# save it as a gif
-clip = ImageSequenceClip(result, fps=20)
-clip.write_gif('test.gif', fps=20)
+for i in range(15):
+    arr = np.log(np.loadtxt("{}.csv".format(i),delimiter=','))
+    plt.pcolor(arr)
+    plt.savefig("{}.png".format(i))
+    plt.close()

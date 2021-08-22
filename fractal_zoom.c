@@ -151,8 +151,8 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
 /*generate zoom_num csv files zooming in on x_midpoint, y_midpoint*/
 void zoom(double x_min, double x_max, double y_min, double y_max) {
     int i;
-    double increment = 0.1;
-    char filenames[11][10] = {
+    double increment = 0.005;
+    char filenames[22][10] = {
                          "0.csv",
                          "1.csv",
                          "2.csv",
@@ -163,20 +163,40 @@ void zoom(double x_min, double x_max, double y_min, double y_max) {
                          "7.csv",
                          "8.csv",
                          "9.csv",
-                         "10.csv"
+                         "10.csv",
+                         "10.csv",
+                         "11.csv",
+                         "12.csv",
+                         "13.csv",
+                         "14.csv",
+                         "15.csv",
+                         "16.csv",
+                         "17.csv",
+                         "18.csv",
+                         "19.csv",
+                         "20.csv"
                      };
-    for (i=0;i<10;i++) {
-        increment = increment / 2;
-        x_min = x_min / 2;
-        x_max = x_max / 2;
-        y_min = y_min / 2;
-        y_max = y_max / 2;
+    double x_span = (x_max - x_min);
+    double x_center = x_min + (x_span/2);
+    double y_span = (y_max - y_min);
+    double y_center = y_min + (y_span/2);
+    double zoom_factor = 1.208;
+    for (i=0;i<20;i++) {
+        /*shrink bounding box by zoom_factor X. Increase resolution by zoom_factor X.*/
+        increment = increment / zoom_factor;
+        x_span = x_span / zoom_factor;
+        y_span = y_span / zoom_factor;
+        x_min = x_center - (x_span / zoom_factor);
+        x_max = x_center + (x_span / zoom_factor);
+        y_min = y_center - (y_span / zoom_factor);
+        y_max = y_center + (y_span / zoom_factor);
         fractal(filenames[i], x_min, x_max, y_min, y_max,1000,increment);
     }   
 }
 
 int main() {
-    zoom(-10.0,10.0,-10.0,10.0);
+    /*zoom in on https://en.wikipedia.org/wiki/Misiurewicz_point (-2, i)*/
+    zoom(-2.0,1.1,-1.2,2.2);
     /*fractal("test.csv", -0.25, 0.25, -0.25, 0.25, 1000, 0.001);*/
     return 0;
 }
