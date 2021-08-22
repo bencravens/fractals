@@ -1,16 +1,13 @@
 # fractals
-C and python code to generate pictures of the Mandelbrot set.
+C code to generate pictures of the Mandelbrot set.
 
-To run C script (a lot faster than python)
+To run C script just use make
 ```Bash
-gcc -W -Wall -O2 -g fractal_zoom.c -o output
-./output
-python3 plotc.py
+make
 ```
 
-TODO: 
-- [] Generate gif of fractal zoom
-- [] Higher resolution in C without segfault
-
-Example output:
+Example output: still image
 <img src="./fractal.png">
+
+Example output: gif (can be much higher resolution, this was rendered on my slow laptop)
+<img src="./fractal_zoom.gif">
