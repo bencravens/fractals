@@ -61,9 +61,7 @@ double* arange(double start, double end, double increment) {
         result[i] = start + increment * i;
     }
 
-    for (i=0;i<num;i++) {
-        printf("%f\n",result[i]);
-    }
+    printf("array is %d long\n",num);
 
     /*another error check. Last value of array should be "end"*/
     if (result[num-1] != end) {
@@ -95,10 +93,10 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
     int count;
     FILE* fp1;
 
+    printf("made it this far");
     /*make the result matrix*/
     for(i=0;i<y_len;i++){
         for(j=0;j<x_len;j++){
-            printf("%f, %f\n",x_range[j],y_range[i]);
             x_0 = x_range[j];
             y_0 = y_range[i];
             x = x_range[j];
@@ -115,7 +113,6 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
 
                 /*check to see if we are trapped in a periodic iteration loop*/
                 if (isclose(x,x_old,1e-3,0.0001) && isclose(y,y_old,1e-3,0.0001)) {
-                    printf("converged");
                     count = max_iters;
                     break;
                 }
@@ -149,25 +146,21 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
 
     free(x_range);
     free(y_range);
+    free(result);
 }
 
 /*generate zoom_num csv files zooming in on x_midpoint, y_midpoint*/
-void zoom(double x_midpoint, double y_midpoint, int zoom_num) {
+void zoom(double x_min, double x_max, double y_min, double y_max, int zoom_num) {
     int i;
-    /*hardcode mandelbrot range*/
-    double x_min_boundary = -2.5;
-    double x_max_boundary = 1.0;
-    double y_min_boundary = -1.0;
-    double y_max_boundary = 1.0;
-    double x_radius = (x_max_boundary - x_min_boundary);
-    double y_radius = (y_max_boundary - y_min_boundary);
-    double x_min;
-    double x_max;
-    double y_min;
-    double y_max;
+    double x_radius = (x_max - x_min) / 2;
+    double y_radius = (y_max - y_min) / 2;
+    double x_midpoint = (x_max - x_min);
+    double y_midpoint = (y_max - y_min);
     char filename[32]; // The filename buffer.
+    double increment = 0.003;
     for (i=0;i<zoom_num;i++) {
         /*zoom in a bit*/
+        increment = increment / 2;
         x_radius = x_radius / 2;
         y_radius = y_radius / 2;
         x_min = x_midpoint - x_radius;
@@ -177,12 +170,13 @@ void zoom(double x_midpoint, double y_midpoint, int zoom_num) {
         // Put "file" then k then ".txt" in to filename.
         snprintf(filename, sizeof(char) * 32, "%i.csv", i);
         printf("filename is %s",filename);
-        fractal(filename, x_min, x_max, y_min, y_max,1000,0.003);
+        fractal(filename, x_min, x_max, y_min, y_max,1000,increment);
     }
 }
 
 int main() {
-    printf("hello world\n");
-    zoom(-0.75, 0, 10);
+    zoom(-2.5,1.0,-1.0,1.0,10);
+    /*fractal("test.csv", -0.25, 0.25, -0.25, 0.25, 1000, 0.001);*/
     return 0;
 }
+
