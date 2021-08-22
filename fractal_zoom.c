@@ -74,11 +74,11 @@ double* arange(double start, double end, double increment) {
 }
 
 /*generate the fractal*/
-void fractal_zoom(int max_iters, double increment) {
-    double* x_range = arange(-2.5,1.0,increment);
-    int x_len = (int) ((3.5)/increment) + 1;
-    double* y_range = arange(-1,1,increment);
-    int y_len = (int) ((2)/increment) + 1;
+void fractal(char* filename, double x_min, double x_max, double y_min, double y_max, int max_iters, double increment) {
+    double* x_range = arange(x_min,x_max,increment);
+    int x_len = (int) ((fabs(x_max-x_min)/increment) + 1);
+    double* y_range = arange(y_min,y_max,increment);
+    int y_len = (int) ((fabs(y_max-y_min)/increment) + 1);
     double result[y_len][x_len];
     int i;
     int j;
@@ -131,7 +131,7 @@ void fractal_zoom(int max_iters, double increment) {
     }
 
     /*write result to csv file so we can plot it with python*/
-    fp1 = fopen("fractal.csv", "w");
+    fp1 = fopen(filename, "w");
     if (fp1 == NULL) {
         fprintf(stderr, "could not open file\n");
         exit(EXIT_FAILURE);
@@ -151,8 +151,38 @@ void fractal_zoom(int max_iters, double increment) {
     free(y_range);
 }
 
+/*generate zoom_num csv files zooming in on x_midpoint, y_midpoint*/
+void zoom(double x_midpoint, double y_midpoint, int zoom_num) {
+    int i;
+    /*hardcode mandelbrot range*/
+    double x_min_boundary = -2.5;
+    double x_max_boundary = 1.0;
+    double y_min_boundary = -1.0;
+    double y_max_boundary = 1.0;
+    double x_radius = (x_max_boundary - x_min_boundary);
+    double y_radius = (y_max_boundary - y_min_boundary);
+    double x_min;
+    double x_max;
+    double y_min;
+    double y_max;
+    char filename[32]; // The filename buffer.
+    for (i=0;i<zoom_num;i++) {
+        /*zoom in a bit*/
+        x_radius = x_radius / 2;
+        y_radius = y_radius / 2;
+        x_min = x_midpoint - x_radius;
+        x_max = x_midpoint + x_radius;
+        y_min = y_midpoint - y_radius;
+        y_max = y_midpoint + y_radius;
+        // Put "file" then k then ".txt" in to filename.
+        snprintf(filename, sizeof(char) * 32, "%i.csv", i);
+        printf("filename is %s",filename);
+        fractal(filename, x_min, x_max, y_min, y_max,1000,0.003);
+    }
+}
+
 int main() {
     printf("hello world\n");
-    fractal_zoom(1000,0.003);
+    zoom(-0.75, 0, 10);
     return 0;
 }
