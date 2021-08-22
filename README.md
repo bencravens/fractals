@@ -1,5 +1,5 @@
 # fractals
-C code to generate pictures of the Mandelbrot set.
+C code to generate gifs of the classic Mandelbrot set zoom.
 
 To run C script just use make
 ```Bash
