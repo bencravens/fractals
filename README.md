@@ -1,6 +1,9 @@
 # fractals
 C code to generate gifs of the classic Mandelbrot set zoom.
 
+TODO:
+- [ ] Anti-aliasing at higher zooms
+
 To run C script just use make
 ```Bash
 make
