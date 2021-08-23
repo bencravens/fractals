@@ -174,28 +174,17 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
 }
 
 /*generate zoom_num csv files zooming in on x_midpoint, y_midpoint*/
-void zoom(double x_min, double x_max, double y_min, double y_max) {
+void zoom(double x_min, double x_max, double y_min, double y_max, int num_files) {
     int i;
     double increment = 0.005;
-    char filenames[10][10] = {
-                         "0.csv",
-                         "1.csv",
-                         "2.csv",
-                         "3.csv",
-                         "4.csv",
-                         "5.csv",
-                         "6.csv",
-                         "7.csv",
-                         "8.csv",
-                         "9.csv",
-                         "10.csv",
-                     };
+    char* filename;
+    int filename_len;
     double x_span = (x_max - x_min);
     double x_center = x_min + (x_span/2);
     double y_span = (y_max - y_min);
     double y_center = y_min + (y_span/2);
     double zoom_factor = 1.208;
-    for (i=0;i<10;i++) {
+    for (i=0;i<num_files;i++) {
         /*shrink bounding box by zoom_factor X. Increase resolution by zoom_factor X.*/
         increment = increment / zoom_factor;
         x_span = x_span / zoom_factor;
@@ -204,16 +193,23 @@ void zoom(double x_min, double x_max, double y_min, double y_max) {
         x_max = x_center + (x_span / zoom_factor);
         y_min = y_center - (y_span / zoom_factor);
         y_max = y_center + (y_span / zoom_factor);
-        fractal(filenames[i], x_min, x_max, y_min, y_max,1000,increment);
+        /*generate filename*/
+        /*filename will be i.csv (i + 4 characters), and then we need another for null end char*/
+        filename_len = snprintf(NULL,0,"%d",i) + 5;
+        filename = emalloc(filename_len * sizeof filename[0]);
+        sprintf(filename, "%d.csv",i);
+        fractal(filename, x_min, x_max, y_min, y_max,1000,increment);
+        free(filename);
     }
 }
 
 int main() {
     /*zoom in on https://en.wikipedia.org/wiki/Misiurewicz_point (-2, i)*/
-    zoom(-2.0,1.1,-1.2,2.2);
+    zoom(-2.0,1.1,-1.2,2.2,10);
     /*fractal("test.csv", -0.25, 0.25, -0.25, 0.25, 1000, 0.001);*/
     return 0;
 }
+
 
 
 
