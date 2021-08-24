@@ -133,11 +133,13 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
                     break;
                 }
                 period++;
+                /* period checking code not working
                 if (period > 20) {
                     period = 0;
                     x_old = x;
                     y_old = y;
                 }
+                */
             }
             result_matrix[i][j] = count;
         }
