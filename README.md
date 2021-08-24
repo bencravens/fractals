@@ -1,8 +1,23 @@
 # fractals
 C code to generate gifs of the classic Mandelbrot set zoom.
 
-TODO:
-- [ ] Anti-aliasing at higher zooms
+TODO: Rewrite Image generation in C
+
+- [ ] Normalize intensity values to be from 0-255 (greyscale)
+- [ ] Convert greyscale to RGB using RGB struct using same intensity for each R,G,B value:
+
+Something like this:
+```C
+int normalized_intensity = 120;
+
+typedef struct RGB {
+    double r = 120.0;
+    double g = 120.0;
+     double b = 120.0;
+}
+```
+- [ ] Convert RGB struct array to image using a C image library
+
 
 To run C script just use make
 ```Bash
