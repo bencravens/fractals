@@ -63,13 +63,6 @@ double* arange(double start, double end, double increment) {
         result[i] = start + increment * i;
     }
 
-    printf("array is %d long\n",num);
-
-    /*another error check. Last value of array should be "end"*/
-    if (result[num-1] != end) {
-        printf("last entry: %f. Should be %f\n",result[num-1],end);
-    }
-
     return result;
 }
 
@@ -91,6 +84,7 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
     double y2;
     double x_old;
     double y_old;
+    double result_max = 0.0;
     int period;
     int count;
     FILE* fp1;
@@ -141,22 +135,40 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
                 }
                 */
             }
+            /*set max value*/
+            if (count > result_max) {
+                result_max = count;
+            }
             result_matrix[i][j] = count;
         }
     }
 
-    /*write result to csv file so we can plot it with python*/
+    /*normalize result matrix to grayscale (0-255)*/
+    printf("maximum value for %s is %f\n",filename,result_max);
+    for(i=0;i<y_len;i++){
+        for(j=0;j<x_len;j++){
+            result_matrix[i][j] = (result_matrix[i][j] / result_max) * 255;
+        }
+    }
+ 
+    /*write result to NetPBM format file so we can convert it with imagemagick*/
     fp1 = fopen(filename, "w");
     if (fp1 == NULL) {
         printf("could not open file\n");
         exit(EXIT_FAILURE);
     }
+
+    fprintf(fp1,"P2\n");  // P5 filetype    
+    fprintf(fp1,"%d %d\n",x_len, y_len); //dimensions
+    fprintf(fp1,"255\n"); //Max pixel
+
+    /*now write to file*/
     for (i=0; i<y_len; i++) {
         for (j=0; j<x_len; j++) {
-            fprintf(fp1, "%lf", result_matrix[i][j]);
-            if (j<(x_len-1)) {
-                fprintf(fp1, ",");
-            }
+            fprintf(fp1, "%d", (int) result_matrix[i][j]);
+            if (j<(x_len-1)){
+                fprintf(fp1, "    ");
+            } 
         }
         fprintf(fp1,"\n");
     }
@@ -199,7 +211,7 @@ void zoom(double x_min, double x_max, double y_min, double y_max, int num_files)
         /*filename will be i.csv (i + 4 characters), and then we need another for null end char*/
         filename_len = snprintf(NULL,0,"%d",i) + 5;
         filename = emalloc(filename_len * sizeof filename[0]);
-        sprintf(filename, "%d.csv",i);
+        sprintf(filename, "%d.pgm",i);
         fractal(filename, x_min, x_max, y_min, y_max,1000,increment);
         free(filename);
     }
