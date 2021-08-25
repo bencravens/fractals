@@ -5,4 +5,4 @@ To run just use my build script
 ```Bash
 bash makegif.sh
 ```
-and follow the prompts
+and follow the prompts.
