@@ -1,17 +1,11 @@
 # fractals
 C code to generate gifs of the classic Mandelbrot set zoom.
 
-TODO: Rewrite Image generation in C
-
-- [x] Normalize intensity values to be from 0-255 (greyscale)
-- [x] Convert greyscale array to .PGM format using this code: https://stackoverflow.com/questions/22580812/writing-a-png-in-c/22580958#22580958
-- [ ] Use imagemagick to convert to a gif
-
-
-To run C script just use make
+To run C script just use my build script
 ```Bash
-make
+bash makegif.sh
 ```
+and follow the prompts
 
 Example output: still image
 <img src="./fractal.png">
