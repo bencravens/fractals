@@ -82,10 +82,7 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
     double x_temp;
     double x2;
     double y2;
-    double x_old;
-    double y_old;
     double result_max = 0.0;
-    int period;
     int count;
     FILE* fp1;
 
@@ -120,20 +117,6 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
                 y = 2*x*y + y_0;
                 x = x_temp;
                 count++;
-
-                /*check to see if we are trapped in a periodic iteration loop*/
-                if (isclose(x,x_old,1e-3,0.0001) && isclose(y,y_old,1e-3,0.0001)) {
-                    count = max_iters;
-                    break;
-                }
-                period++;
-                /* period checking code not working
-                if (period > 20) {
-                    period = 0;
-                    x_old = x;
-                    y_old = y;
-                }
-                */
             }
             /*set max value*/
             if (count > result_max) {
@@ -165,6 +148,7 @@ void fractal(char* filename, double x_min, double x_max, double y_min, double y_
     /*now write to file*/
     for (i=0; i<y_len; i++) {
         for (j=0; j<x_len; j++) {
+            /*write to file, logarithmic intensity scale for visual effect*/
             fprintf(fp1, "%d", (int) result_matrix[i][j]);
             if (j<(x_len-1)){
                 fprintf(fp1, "    ");
@@ -208,7 +192,7 @@ void zoom(double x_min, double x_max, double y_min, double y_max, int num_files)
         y_min = y_center - (y_span / zoom_factor);
         y_max = y_center + (y_span / zoom_factor);
         /*generate filename*/
-        /*filename will be i.csv (i + 4 characters), and then we need another for null end char*/
+        /*filename will be i.pgm (i + 4 characters), and then we need another for null terminator*/
         filename_len = snprintf(NULL,0,"%d",i) + 5;
         filename = emalloc(filename_len * sizeof filename[0]);
         sprintf(filename, "%d.pgm",i);
@@ -218,9 +202,55 @@ void zoom(double x_min, double x_max, double y_min, double y_max, int num_files)
 }
 
 int main() {
-    /*zoom in on https://en.wikipedia.org/wiki/Misiurewicz_point (-2, i)*/
-    zoom(-2.0,1.1,-1.2,2.2,10);
-    /*fractal("test.csv", -0.25, 0.25, -0.25, 0.25, 1000, 0.001);*/
+    double x_min,x_max,y_min,y_max;
+    double x_mid,y_mid;
+    double x_width,y_width;
+    int zooms;
+    int result_code;   
+ 
+    /*get user input*/
+    printf("Welcome to my fractal zoom program.\n");
+    printf("Enter the x co-ordinate you want to zoom in on:\n");
+    result_code = scanf("%lg",&x_mid);
+    if (result_code!=1) {
+        printf("scanf failed.\n");
+        exit(EXIT_FAILURE);
+    }
+    printf("Enter the y co-ordinate you want to zoom in on:\n");
+    result_code = scanf("%lg",&y_mid);
+    if (result_code!=1) {
+        printf("scanf failed.\n");
+        exit(EXIT_FAILURE);
+    }
+    printf("Enter the initial x domain range:\n");
+    result_code = scanf("%lg",&x_width);
+    if (result_code!=1) {
+        printf("scanf failed.\n");
+        exit(EXIT_FAILURE);
+    }   
+    printf("Enter the initial y domain range:\n");
+    result_code = scanf("%lg",&y_width);
+    if (result_code!=1) {
+        printf("scanf failed.\n");
+        exit(EXIT_FAILURE);
+    }
+    printf("Enter the number of zooms you would like to do:\n");
+    result_code = scanf("%d",&zooms);
+    if (result_code!=1) {
+        printf("scanf failed.\n");
+        exit(EXIT_FAILURE);
+    }  
+
+    printf("input was %f %f %f %f %d\n",x_mid,x_width,y_mid,y_width,zooms);    
+
+    /*calculate x_min,x_max,y_min,y_max*/
+    x_min = x_mid - (x_width / 2);
+    x_max = x_mid + (x_width / 2);
+    y_min = y_mid - (y_width / 2);
+    y_max = y_mid + (y_width / 2);
+
+    /*call zoom function*/ 
+    zoom(x_min,x_max,y_min,y_max,zooms);
     return 0;
 }
 
