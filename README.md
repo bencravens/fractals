@@ -3,8 +3,8 @@ C code to generate gifs of the classic Mandelbrot set zoom.
 
 TODO: Rewrite Image generation in C
 
-- [ ] Normalize intensity values to be from 0-255 (greyscale)
-- [ ] Convert greyscale array to .PGM format using this code: https://stackoverflow.com/questions/22580812/writing-a-png-in-c/22580958#22580958
+- [x] Normalize intensity values to be from 0-255 (greyscale)
+- [x] Convert greyscale array to .PGM format using this code: https://stackoverflow.com/questions/22580812/writing-a-png-in-c/22580958#22580958
 - [ ] Use imagemagick to convert to a gif
 
 
