@@ -6,3 +6,8 @@ To run just use my build script
 bash makegif.sh
 ```
 and follow the prompts.
+
+Todo:
+
+- [ ] Logarithmic colourscheme
+- [ ] Add interesting co-ordinates to zoom in on
